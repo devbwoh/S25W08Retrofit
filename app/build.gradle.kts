@@ -41,6 +41,13 @@ android {
 
 dependencies {
 
+    // NOTE: Retrofit 사용하기 위해 추가
+    implementation("com.squareup.retrofit2:retrofit:3.0.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
+
+    // NOTE: viewModel() 사용하기 위해 추가
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.9.4")
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
