@@ -41,6 +41,12 @@ android {
 
 dependencies {
 
+    // Coil 사용
+    // https://github.com/coil-kt/coil/blob/main/README-ko.md#jetpack-compose
+    // 3.3.0 사용하니 에러가 발생하여 3.2.0 사용함
+    implementation("io.coil-kt.coil3:coil-compose:3.2.0")
+    implementation("io.coil-kt.coil3:coil-network-okhttp:3.2.0")
+
     // NOTE: Retrofit 사용하기 위해 추가
     implementation("com.squareup.retrofit2:retrofit:3.0.0")
     implementation("com.squareup.retrofit2:converter-gson:2.11.0")

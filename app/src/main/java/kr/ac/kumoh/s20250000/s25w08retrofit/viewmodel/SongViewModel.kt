@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kr.ac.kumoh.s20250000.s25w08retrofit.model.Song
 import kr.ac.kumoh.s20250000.s25w08retrofit.repository.SongRepository
@@ -13,7 +13,9 @@ class SongViewModel(
     private val repository: SongRepository = SongRepository()
 ) : ViewModel() {
     private val _songList = MutableStateFlow<List<Song>>(emptyList())
-    val songList: StateFlow<List<Song>> = _songList
+    val songList = _songList.asStateFlow()
+//    val songList: StateFlow<List<Song>>
+//        get() = _songList
 
     init {
         fetchSongs()

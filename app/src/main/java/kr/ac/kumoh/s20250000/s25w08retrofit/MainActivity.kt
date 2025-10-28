@@ -7,7 +7,9 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -22,11 +24,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil3.compose.AsyncImage
 import kr.ac.kumoh.s20250000.s25w08retrofit.model.Song
 import kr.ac.kumoh.s20250000.s25w08retrofit.ui.theme.S25W08RetrofitTheme
 import kr.ac.kumoh.s20250000.s25w08retrofit.viewmodel.SongViewModel
@@ -77,20 +82,37 @@ fun SongCard(song: Song) {
         modifier = Modifier.fillMaxWidth(),
         elevation = CardDefaults.cardElevation(8.dp)
     ) {
-        Column(
-            modifier = Modifier
-                .padding(vertical = 16.dp)
+        Row(
+            modifier = Modifier.fillMaxSize(),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = song.title,
-                fontWeight = FontWeight.Bold,
-                fontSize = 20.sp,
+            // Coil을 사용한 비동기 이미지 출력
+            AsyncImage(
+                model = "https://picsum.photos/300/300?random=${song.id}",
+                contentDescription = "${song.title} 이미지",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .width(80.dp)
+                    .fillMaxHeight()
             )
-            Spacer(Modifier.height(16.dp))
-            Text(
-                text = song.singer,
-            )
+
+            Spacer(Modifier.width(16.dp))
+
+            Column(
+                modifier = Modifier
+                    .padding(vertical = 16.dp)
+            ) {
+                Text(
+                    text = song.title,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp,
+                )
+                Spacer(Modifier.height(16.dp))
+                Text(
+                    text = song.singer,
+                )
+            }
+            Spacer(Modifier.width(16.dp))
         }
-        Spacer(Modifier.width(16.dp))
     }
 }
