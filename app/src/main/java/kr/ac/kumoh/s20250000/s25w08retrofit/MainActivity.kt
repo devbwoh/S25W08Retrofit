@@ -107,6 +107,7 @@ fun MainScreen(viewModel: SongViewModel = viewModel()) {
                     FloatingActionButton(
                         onClick = {
                             showingAddDialog.value = true
+                            //viewModel.deleteSong("115cff3c-3bdb-4938-95a6-97f5c3a949c8")
                         },
                         containerColor = MaterialTheme.colorScheme.primary,
                         contentColor = MaterialTheme.colorScheme.onPrimary,
@@ -122,7 +123,12 @@ fun MainScreen(viewModel: SongViewModel = viewModel()) {
                 modifier = Modifier.padding(innerPadding),
             ) {
                 composable(SONG_SCREEN) {
-                    SongList(songList) {
+                    SongList(
+                        songList,
+                        onDelete = { songId ->
+                            viewModel.deleteSong(songId)
+                        }
+                    ) {
                         // Stack은 유지하면서 중복 생성만 방지함
                         navController.navigate("$SONG_DETAIL_SCREEN/$it") {
                             launchSingleTop = true

@@ -13,4 +13,9 @@ class SongRepository {
     suspend fun addSong(song: Song) {
         songApi.addSong(song)
     }
+
+    suspend fun deleteSong(id: String) {
+        val filter = "eq.$id"
+        songApi.deleteSong(filter)
+    }
 }

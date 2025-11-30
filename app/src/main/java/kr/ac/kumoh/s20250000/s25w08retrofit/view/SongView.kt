@@ -14,11 +14,13 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -29,8 +31,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
+import androidx.compose.material3.SwipeToDismissBox
+import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -54,6 +59,7 @@ import kr.ac.kumoh.s20250000.s25w08retrofit.viewmodel.SongViewModel
 @Composable
 fun SongList(
     list: List<Song>,
+    onDelete: (String) -> Unit,
     onNavigateToDetail: (String) -> Unit,
 ) {
     LazyColumn(
@@ -62,7 +68,36 @@ fun SongList(
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         items(list, key = { it.id }) { song ->
-            SongCard(song, onNavigateToDetail)
+            val dismissState = rememberSwipeToDismissBoxState(
+                confirmValueChange = {
+                    if (it == SwipeToDismissBoxValue.EndToStart) {
+                        onDelete(song.id)
+                        true
+                    } else {
+                        false
+                    }
+                }
+            )
+
+            SwipeToDismissBox(
+                state = dismissState,
+                modifier = Modifier
+                    .clip(RoundedCornerShape(percent = 13)),
+                backgroundContent = {
+                    Icon(
+                        imageVector = Icons.Default.Delete,
+                        contentDescription = "노래 삭제",
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(Color.Red)
+                            .wrapContentSize(Alignment.CenterEnd)
+                            .padding(12.dp),
+                        tint = Color.White
+                    )
+                }
+            ) {
+                SongCard(song, onNavigateToDetail)
+            }
         }
     }
 }

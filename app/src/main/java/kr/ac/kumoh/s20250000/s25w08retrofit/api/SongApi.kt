@@ -2,6 +2,7 @@ package kr.ac.kumoh.s20250000.s25w08retrofit.api
 
 import kr.ac.kumoh.s20250000.s25w08retrofit.model.Song
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Query
@@ -19,4 +20,11 @@ interface SongApi {
         @Query("apikey")
         apikey: String = SongApiConfig.API_KEY
     ): Unit
+
+    @DELETE("songs")
+    suspend fun deleteSong(
+        @Query("id") filter: String,
+        @Query("apikey")
+        apikey: String = SongApiConfig.API_KEY
+    )
 }

@@ -64,4 +64,15 @@ class SongViewModel(
             }
         }
     }
+
+    fun deleteSong(songId: String) {
+        viewModelScope.launch {
+            try {
+                repository.deleteSong(songId)
+                _songList.value = _songList.value.filter { it.id != songId }
+            } catch(e: Exception) {
+                Log.e("deleteSong()", e.toString())
+            }
+        }
+    }
 }
