@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kr.ac.kumoh.s20250000.s25w08retrofit.model.Song
 import kr.ac.kumoh.s20250000.s25w08retrofit.repository.SongRepository
+import java.util.UUID
 
 class SongViewModel(
     private val repository: SongRepository = SongRepository()
@@ -34,4 +35,33 @@ class SongViewModel(
     }
 
     fun findSong(id: String) = _songList.value.find { it.id == id }
+
+    fun addSong(title: String, singer: String, rating: Int, lyrics: String?) {
+//        val newSong = Song(
+//            id = UUID.randomUUID().toString(),
+//            title = "test",
+//            singer = "test",
+//            rating = 5,
+//            lyrics = null
+//        )
+
+        val newSong = Song(
+            id = UUID.randomUUID().toString(),
+            title = title,
+            singer = singer,
+            rating = rating,
+            lyrics = lyrics
+        )
+
+        //Log.i("addSong()", newSong.toString())
+
+        viewModelScope.launch {
+            try {
+                repository.addSong(newSong)
+                _songList.value = _songList.value + newSong
+            } catch(e: Exception) {
+                Log.e("addSong()", e.toString())
+            }
+        }
+    }
 }

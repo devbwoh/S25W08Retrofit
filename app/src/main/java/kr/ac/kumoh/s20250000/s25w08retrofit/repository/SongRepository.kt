@@ -9,4 +9,8 @@ class SongRepository {
     suspend fun getSongs(): List<Song> {
         return songApi.getSongs()
     }
+
+    suspend fun addSong(song: Song) {
+        songApi.addSong(song)
+    }
 }

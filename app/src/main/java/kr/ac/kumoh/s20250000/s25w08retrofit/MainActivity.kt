@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Star
@@ -14,6 +15,7 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -29,6 +31,8 @@ import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -49,6 +53,7 @@ import kr.ac.kumoh.s20250000.s25w08retrofit.navigation.Screens.SONG_ID_ARG
 import kr.ac.kumoh.s20250000.s25w08retrofit.navigation.Screens.SONG_SCREEN
 import kr.ac.kumoh.s20250000.s25w08retrofit.ui.theme.S25W08RetrofitTheme
 import kr.ac.kumoh.s20250000.s25w08retrofit.view.SingerScreen
+import kr.ac.kumoh.s20250000.s25w08retrofit.view.SongAddDialog
 import kr.ac.kumoh.s20250000.s25w08retrofit.view.SongDetailScreen
 import kr.ac.kumoh.s20250000.s25w08retrofit.view.SongList
 import kr.ac.kumoh.s20250000.s25w08retrofit.viewmodel.SongViewModel
@@ -74,6 +79,8 @@ fun MainScreen(viewModel: SongViewModel = viewModel()) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
+    val showingAddDialog = remember { mutableStateOf(false) }
+
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
@@ -89,6 +96,23 @@ fun MainScreen(viewModel: SongViewModel = viewModel()) {
             bottomBar = {
                 BottomBar(navController) {
                     navigateAndClearStack(navController, it)
+                }
+            },
+            floatingActionButton = {
+                val navBackStackEntry by navController.currentBackStackEntryAsState()
+                val currentRoute = navBackStackEntry?.destination?.route
+
+                // 노래 화면일 때만 FAB 표시
+                if (currentRoute == SONG_SCREEN) {
+                    FloatingActionButton(
+                        onClick = {
+                            showingAddDialog.value = true
+                        },
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = MaterialTheme.colorScheme.onPrimary,
+                    ) {
+                        Icon(Icons.Filled.Add, contentDescription = "노래 추가")
+                    }
                 }
             }
         ) { innerPadding ->
@@ -124,6 +148,12 @@ fun MainScreen(viewModel: SongViewModel = viewModel()) {
                     SingerScreen()
                 }
             }
+        }
+    }
+
+    if (showingAddDialog.value) {
+        SongAddDialog(viewModel) {
+            showingAddDialog.value = false
         }
     }
 }
