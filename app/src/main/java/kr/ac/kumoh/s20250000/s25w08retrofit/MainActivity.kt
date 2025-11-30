@@ -19,6 +19,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -83,6 +85,11 @@ fun MainScreen(viewModel: SongViewModel = viewModel()) {
             modifier = Modifier.fillMaxSize(),
             topBar = {
                 TopBar(scope, drawerState)
+            },
+            bottomBar = {
+                BottomBar(navController) {
+                    navigateAndClearStack(navController, it)
+                }
             }
         ) { innerPadding ->
             NavHost(
@@ -205,4 +212,45 @@ fun TopBar(
             titleContentColor = MaterialTheme.colorScheme.primary,
         ),
     )
+}
+
+@Composable
+fun BottomBar(
+    navController: NavHostController,
+    onNavigate: (String) -> Unit
+) {
+    val currentDestination = navController.currentBackStackEntryAsState().value?.destination
+
+    NavigationBar {
+        NavigationBarItem(
+            label = {
+                Text("노래")
+            },
+            icon = {
+                Icon(
+                    Icons.Default.Star,
+                    contentDescription = "노래 아이콘"
+                )
+            },
+            selected = currentDestination?.route == SONG_SCREEN,
+            onClick = {
+                onNavigate(SONG_SCREEN)
+            }
+        )
+        NavigationBarItem(
+            label = {
+                Text("가수")
+            },
+            icon = {
+                Icon(
+                    Icons.Default.Face,
+                    contentDescription = "가수 아이콘"
+                )
+            },
+            selected = currentDestination?.route == SINGER_SCREEN,
+            onClick = {
+                onNavigate(SINGER_SCREEN)
+            }
+        )
+    }
 }
