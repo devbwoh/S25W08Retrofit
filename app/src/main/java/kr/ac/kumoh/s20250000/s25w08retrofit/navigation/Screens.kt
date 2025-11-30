@@ -5,4 +5,6 @@ object Screens {
     const val SONG_DETAIL_SCREEN = "song_detail_screen"
     const val SONG_ID_ARG = "songId"
     const val SONG_DETAIL_ROUTE = "$SONG_DETAIL_SCREEN/{$SONG_ID_ARG}"
+
+    const val SINGER_SCREEN = "singer_screen"
 }
